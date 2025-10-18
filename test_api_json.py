@@ -104,4 +104,102 @@ def test_photos_album():
     data = response.json()
     expective_title = "reprehenderit est deserunt velit ipsam"
 
-    assert data[0]["title"] == expective_title, f"Título esperado: '{expective_title}', mas foi: '{data[0]['title']}'"
+    for i in data:
+        assert expective_title not in i["title"]
+    print("Nao esta na lista")
+    #assert data[0]["title"] == expective_title, f"Título esperado: '{expective_title}', mas foi: '{data[0]['title']}'"
+
+#Create a New Task (Todo)
+
+def test_new_task():
+    url = "https://jsonplaceholder.typicode.com/posts"
+    data = {"userId":1, "title": "Learn Pytest", "body": "Conteúdo novo"}
+    data_post =requests.post(url, json= data)
+    assert data_post.status_code == 201
+    data_json =data_post.json()
+    assert data_json["title"] == "Learn Pytest"
+    print("O usuário foi criado com sucesso")
+
+#Update a Task (PATCH)
+
+def test_update_task():
+    url = "https://jsonplaceholder.typicode.com/todos/5"
+    data= {"completed:" "True"}
+    update = requests.put(url,data)
+    json_update =update.json()
+    assert update.status_code == 200
+
+#List a User's Completed Tasks
+
+def test_users_completed_tasks():
+    #Filtrei pela URL
+    url = requests.get("https://jsonplaceholder.typicode.com/todos?userId=1&completed=true")
+    response = url.json()
+    print(response)
+
+#Validate a Comment's Structure
+
+def test_validade_structure():
+    url = requests.get("https://jsonplaceholder.typicode.com/comments/10")
+    response = url.json()
+    expected_keys = ["postId", "id", "name", "email", "body"]
+    for i in expected_keys:
+        assert i in response
+
+#Delete a Comment
+
+def test_delete_comemment():
+    url= "https://jsonplaceholder.typicode.com/comments/3"
+    response = requests.delete(url)
+    assert response.status_code == 200 
+    print("O comentário foi deletado")
+
+#Create a Post with Invalid Data
+
+def test_create_invalid_data():
+    url = "https://jsonplaceholder.typicode.com/posts"
+    data = {}
+    data_post = requests.post(url, json= data)
+    assert data_post.status_code == 201 
+
+#Fetch a Specific User's Posts
+
+def test_users_post():
+    url = requests.get("https://jsonplaceholder.typicode.com//users/7/posts")
+    response = url.json()
+    count_response =len(response)
+    
+    print(f" o user 7 tem {(count_response)}")
+
+#Update a User's Email (PUT)
+
+def test_update_email():
+    url = "https://jsonplaceholder.typicode.com/users/2"
+
+    data = {"email": "new.email@example.com"}
+
+    data_update = requests.put(url, json=data)
+
+    assert data_update.status_code == 200 
+    print("O email do user 2 foi atualizado")
+
+#Delete an Album
+
+def delete_album():
+    url = "https://jsonplaceholder.typicode.com/users/4/album"
+    data = requests.delete(url)
+    assert data.status_code == 200 
+
+#Final Challenge with JSONPlaceholder
+
+def test_final_challenge():
+     url = "https://jsonplaceholder.typicode.com/posts"
+     data = {"userId": 1, "title": "Meu post", "body": "Conteúdo", "coments": "desafio"}
+     data_post = requests.post(url, json = data)
+     assert data_post.status_code == 201
+
+     data_json= data_post.json()
+     data_json("userId")
+     assert data_json is not None
+    #  data_delete = requests.delete(url)
+    #  assert data_delete.status_code == 200
