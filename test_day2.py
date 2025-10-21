@@ -221,3 +221,5 @@ def test_todo_completed_is_boolean():
     completed_value = response_json.get("completed")
 
     assert isinstance(completed_value, bool)
+
+
